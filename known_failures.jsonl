@@ -1,0 +1,3 @@
+{"text": "20 bundles of 500 bags woven sacks Rajkot", "expected": {"category": "woven_sack", "quantity": 10000, "unit": "pcs", "gsm": null, "micron": null, "location": "Rajkot"}}
+{"text": "need 10000 boxes and 5000 pouches, Pune", "expected": {"category": "corrugated_box", "quantity": 10000, "unit": "pcs", "gsm": null, "micron": null, "location": "Pune"}}
+{"text": "10 lac woven bags 50 kg chahiye UP mein", "expected": {"category": "woven_sack", "quantity": 1000000, "unit": "pcs", "gsm": null, "micron": null, "location": "Uttar Pradesh"}}
