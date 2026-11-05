@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="414" viewBox="0 0 1000 414" role="img" aria-label="Terminal demo of parse.py explaining three buyer messages">
+  <defs>
+    <style>
+      text { font-family: Consolas, "SF Mono", Menlo, "DejaVu Sans Mono", monospace; font-size: 13.5px; white-space: pre; }
+      .cmd { fill: #E2E8F0; } .prompt { fill: #22D3EE; } .echo { fill: #94A3B8; }
+      .trace { fill: #C4B5FD; } .out { fill: #86EFAC; } .title { fill: #94A3B8; font-size: 13px; }
+      .b2, .b3 { animation: 14s linear infinite; }
+      .b2 { animation-name: show2; } .b3 { animation-name: show3; }
+      @keyframes show2 { 0%, 18% { opacity: 0; } 22%, 96% { opacity: 1; } 100% { opacity: 0; } }
+      @keyframes show3 { 0%, 40% { opacity: 0; } 44%, 96% { opacity: 1; } 100% { opacity: 0; } }
+      @media (prefers-reduced-motion: reduce) { .b2, .b3 { animation: none; } }
+    </style>
+  </defs>
+
+  <rect width="1000" height="414" rx="14" fill="#0D1117"/>
+  <path d="M0 14 A14 14 0 0 1 14 0 H986 A14 14 0 0 1 1000 14 V40 H0 Z" fill="#161B22"/>
+  <circle cx="24" cy="20" r="6.5" fill="#FF5F57"/>
+  <circle cx="46" cy="20" r="6.5" fill="#FEBC2E"/>
+  <circle cx="68" cy="20" r="6.5" fill="#28C840"/>
+  <text x="500" y="25" text-anchor="middle" class="title">rfq-parser</text>
+
+  <g class="b1">
+    <text x="22" y="72"><tspan class="prompt">$ </tspan><tspan class="cmd">python parse.py --explain "bopp bags chahiye 40 hazaar, 65 gsm, Nagpur"</tspan></text>
+    <text x="22" y="94" class="echo">bopp bags chahiye 40 hazaar, 65 gsm, Nagpur</text>
+    <text x="22" y="116" class="trace">  bopp bags chahiye [40000 -&gt; bare] [65 -&gt; gsm] gsm nagpur</text>
+    <text x="22" y="138" class="out">  =&gt; {"category": "bopp_bag", "quantity": 40000, "unit": "pcs", "gsm": 65, "micron": null, "location": "Nagpur"}</text>
+  </g>
+
+  <g class="b2">
+    <text x="22" y="182"><tspan class="prompt">$ </tspan><tspan class="cmd">python parse.py --explain "jumbo bag 1000 kg capacity, 500 pcs, Vadodara"</tspan></text>
+    <text x="22" y="204" class="echo">jumbo bag 1000 kg capacity, 500 pcs, Vadodara</text>
+    <text x="22" y="226" class="trace">  jumbo bag [1000 -&gt; fill] kg capacity [500 -&gt; count] pcs vadodara</text>
+    <text x="22" y="248" class="out">  =&gt; {"category": "fibc", "quantity": 500, "unit": "pcs", "gsm": null, "micron": null, "location": "Vadodara"}</text>
+  </g>
+
+  <g class="b3">
+    <text x="22" y="292"><tspan class="prompt">$ </tspan><tspan class="cmd">python parse.py --explain "need quote for 500 kg shrink wrap 25 mic"</tspan></text>
+    <text x="22" y="314" class="echo">need quote for 500 kg shrink wrap 25 mic</text>
+    <text x="22" y="336" class="trace">  need quote for [500 -&gt; kg] kg shrink wrap [25 -&gt; micron] mic</text>
+    <text x="22" y="358" class="out">  =&gt; {"category": "film", "quantity": 500, "unit": "kg", "gsm": null, "micron": 25, "location": null}</text>
+  </g>
+</svg>
