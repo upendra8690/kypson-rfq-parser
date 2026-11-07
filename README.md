@@ -141,7 +141,7 @@ flowchart LR
 **Speed:** about 0.6 s for the first call, including loading the place data, then about 0.2 ms per message on a laptop CPU.
 
 > [!IMPORTANT]
-> **How to read these scores:** the tests and labels were written for this project with AI help, so real buyer messages will probably score lower. These numbers were measured with a stricter stand-in scorer, because the original wasn't in the copy of the brief I received. The included `score.py` is now Kypson's, and these results have not yet been re-measured with it.
+> **How to read these scores:** the tests and labels were written for this project with AI help, so real buyer messages will probably score lower. The three test-file results come from Kypson's `score.py`, included here. The stress test uses its own checker.
 
 <details>
 <summary><b>🔁 Reproduce these results</b></summary>
