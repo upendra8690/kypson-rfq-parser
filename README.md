@@ -141,7 +141,7 @@ flowchart LR
 **Speed:** about 0.6 s for the first call, including loading the place data, then about 0.2 ms per message on a laptop CPU.
 
 > [!IMPORTANT]
-> **How to read these scores:** the tests and labels were written for this project with AI help, so real buyer messages will probably score lower. The included `score.py` is a strict stand-in, because the original scorer wasn't in the copy of the brief I received.
+> **How to read these scores:** the tests and labels were written for this project with AI help, so real buyer messages will probably score lower. These numbers were measured with a stricter stand-in scorer, because the original wasn't in the copy of the brief I received. The included `score.py` is now Kypson's, and these results have not yet been re-measured with it.
 
 <details>
 <summary><b>🔁 Reproduce these results</b></summary>
@@ -198,7 +198,7 @@ Knowing where it fails matters as much as knowing where it works.
 
 ```text
 ├── parse.py               # The parser: parse_rfq(text) -> dict
-├── score.py               # Stand-in scorer with strict exact matching
+├── score.py               # Kypson's scoring script
 ├── stress_test.py         # Random message generator for robustness checks
 ├── my_tests.jsonl         # 64 labelled messages
 ├── heldout_tests.jsonl    # 62 messages in a different style

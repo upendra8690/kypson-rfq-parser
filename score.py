@@ -1,55 +1,49 @@
+"""Scores parse_rfq() from parse.py against a labelled .jsonl file.
+
+Usage:  python score.py            (uses my_tests.jsonl)
+        python score.py other.jsonl
 """
-STAND-IN scorer - NOT Kypson's score.py.
-
-The brief says score.py is attached, but it was missing from the copy we received.
-This file only exists so `python score.py my_tests.jsonl` works locally.
-If you have Kypson's original, use it in place of this file.
-
-Scoring here is deliberately strict: every field must match exactly (numbers compared
-with ==, so 40000 == 40000.0; strings compared as-is, case-sensitive).
-"""
-import json
-import sys
-import time
-
+import json, sys, time
 from parse import parse_rfq
 
-FIELDS = ("category", "quantity", "unit", "gsm", "micron", "location")
+FIELDS = ["category", "quantity", "unit", "gsm", "micron", "location"]
 
 
-def main(path: str) -> None:
-    rows = [json.loads(line) for line in open(path, encoding="utf-8") if line.strip()]
-    field_ok = {f: 0 for f in FIELDS}
-    exact = 0
-    failures = []
-    start = time.perf_counter()
-    for row in rows:
-        got = parse_rfq(row["text"])
-        exp = row["expected"]
-        if set(got) != set(FIELDS):
-            raise SystemExit(f"parse_rfq must return exactly {FIELDS}, got {sorted(got)}")
-        wrong = [f for f in FIELDS if got.get(f) != exp.get(f)]
+def same(field, got, want):
+    if want is None or got is None:
+        return got is None and want is None
+    if field == "quantity":
+        try:
+            return abs(float(got) - float(want)) < 1e-9
+        except (TypeError, ValueError):
+            return False
+    if field == "location":
+        return str(got).strip().lower() == str(want).strip().lower()
+    return got == want
+
+
+def main(path):
+    rows = [json.loads(l) for l in open(path, encoding="utf-8") if l.strip()]
+    per_field = {f: 0 for f in FIELDS}
+    all_ok = 0
+    start = time.time()
+    for r in rows:
+        out = parse_rfq(r["text"])
+        if not isinstance(out, dict):
+            raise TypeError("parse_rfq must return a dict")
+        ok = True
         for f in FIELDS:
-            field_ok[f] += f not in wrong
-        if not wrong:
-            exact += 1
-        else:
-            failures.append((row["text"], {f: (exp.get(f), got.get(f)) for f in wrong}))
-    elapsed = time.perf_counter() - start
-
+            if same(f, out.get(f), r["expected"][f]):
+                per_field[f] += 1
+            else:
+                ok = False
+        all_ok += ok
+    secs = time.time() - start
     n = len(rows)
-    print(f"{n} examples in {elapsed:.2f}s")
+    print(f"Examples: {n}   time: {secs:.2f}s")
     for f in FIELDS:
-        print(f"  {f:<9} {field_ok[f]:>3}/{n}  {100 * field_ok[f] / n:5.1f}%")
-    total = sum(field_ok.values())
-    print(f"field accuracy: {total}/{n * len(FIELDS)} = {100 * total / (n * len(FIELDS)):.1f}%")
-    print(f"exact match:    {exact}/{n} = {100 * exact / n:.1f}%")
-    if failures:
-        print("\nmismatches (expected -> got):")
-        for text, diff in failures:
-            print(f"  {text}")
-            for f, (e, g) in diff.items():
-                print(f"      {f}: {e!r} -> {g!r}")
+        print(f"  {f:10s} {per_field[f]:3d}/{n}  {per_field[f] / n:6.1%}")
+    print(f"  {'ALL FIELDS':10s} {all_ok:3d}/{n}  {all_ok / n:6.1%}")
 
 
 if __name__ == "__main__":
